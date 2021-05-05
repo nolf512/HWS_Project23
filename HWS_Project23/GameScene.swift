@@ -23,6 +23,8 @@ class GameScene: SKScene {
     var activeSliceBG: SKShapeNode!
     var activeSliceFG: SKShapeNode!
     
+    var activeSlicePoints = [CGPoint]()
+    
     override func didMove(to view: SKView) {
         
         //背景
@@ -78,6 +80,46 @@ class GameScene: SKScene {
         
         addChild(activeSliceBG)
         addChild(activeSliceFG)
+    }
+    
+    //画面のタッチ開始
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard let touch = touches.first else { return }
+        let location = touch.location(in: self)
+        activeSlicePoints.append(location)
+        //redrawActiveSlice()
+    }
+    
+    //画面のタッチ開始
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        activeSliceBG.run(SKAction.fadeOut(withDuration: 0.25))
+        activeSliceFG.run(SKAction.fadeOut(withDuration: 0.25))
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard let touch = touches.first else { return }
+        
+        //activeSlicePoints配列内の要素を全て削除
+        activeSlicePoints.removeAll(keepingCapacity: true)
+        
+        //タッチ位置を取得
+        let location = touch.location(in: self)
+        activeSlicePoints.append(location)
+        
+        //redrawActiveSlice()
+        
+        //スライスシェイプに現在アタッチされているアクションをすべて削除
+        activeSliceBG.removeAllActions()
+        activeSliceFG.removeAllActions()
+        
+        //アルファ値1に設定し完全に表示
+        activeSliceBG.alpha = 1
+        activeSliceFG.alpha = 1
+        
+    }
+    
+    func redrawActiveSlice(){
+        
     }
     
 }
