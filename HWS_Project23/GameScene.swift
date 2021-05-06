@@ -120,6 +120,30 @@ class GameScene: SKScene {
     
     func redrawActiveSlice(){
         
+        //activeSlicePointsが二点未満だったら処理を終了
+        if activeSlicePoints.count < 2 {
+            activeSliceBG.path = nil
+            activeSliceFG.path = nil
+            return
+        }
+        
+        //activeSlicePointsを12以内にする
+        if activeSlicePoints.count > 12 {
+            activeSlicePoints.removeFirst(activeSlicePoints.count - 12)
+        }
+        
+        //線を引く
+        let path = UIBezierPath()
+        path.move(to: activeSlicePoints[0])
+        
+        for i in 1..<activeSlicePoints.count {
+            path.addLine(to: activeSlicePoints[i])
+        }
+        
+        //スライス形状のパスを更新し線の幅と色などのデザインを使用して描画
+        activeSliceBG.path = path.cgPath
+        activeSliceFG.path = path.cgPath
+        
     }
     
 }
