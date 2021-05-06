@@ -25,6 +25,8 @@ class GameScene: SKScene {
     
     var activeSlicePoints = [CGPoint]()
     
+    var isSwooshSoundActive = false
+    
     override func didMove(to view: SKView) {
         
         //背景
@@ -87,7 +89,12 @@ class GameScene: SKScene {
         guard let touch = touches.first else { return }
         let location = touch.location(in: self)
         activeSlicePoints.append(location)
-        //redrawActiveSlice()
+        redrawActiveSlice()
+        
+        if !isSwooshSoundActive {
+            //playSwooshSound()
+        }
+        
     }
     
     //画面のタッチ開始
@@ -106,7 +113,7 @@ class GameScene: SKScene {
         let location = touch.location(in: self)
         activeSlicePoints.append(location)
         
-        //redrawActiveSlice()
+        redrawActiveSlice()
         
         //スライスシェイプに現在アタッチされているアクションをすべて削除
         activeSliceBG.removeAllActions()
@@ -143,6 +150,20 @@ class GameScene: SKScene {
         //スライス形状のパスを更新し線の幅と色などのデザインを使用して描画
         activeSliceBG.path = path.cgPath
         activeSliceFG.path = path.cgPath
+        
+    }
+    
+    func playSwooshSound(){
+        isSwooshSoundActive = true
+        
+        let randomNumber = Int.random(in: 1...3)
+        let soundName = "swoosh\(randomNumber).caf"
+        
+        let swooshSound = SKAction.playSoundFileNamed(soundName, waitForCompletion: true)
+        
+        run(swooshSound){[weak self] in
+            self?.isSwooshSoundActive = false
+        }
         
     }
     
