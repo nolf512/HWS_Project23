@@ -180,7 +180,8 @@ class GameScene: SKScene {
                     activeEnemies.remove(at: index)
                 }
                 
-                run(SKAction.playSoundFileNamed("explosiopm", waitForCompletion: <#T##Bool#>))
+                run(SKAction.playSoundFileNamed("explosion.caf", waitForCompletion: false))
+                //endGame(triggerByBomb: true)
                 
             }
         }
